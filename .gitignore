@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio
+.vs
+*.sln
+
+# Other
+bin/
+build/
