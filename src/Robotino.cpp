@@ -12,18 +12,7 @@ if (!isConnected()) { \
 	} else { \
 		LOG_CORE_CRITICAL("Robotino is not connected!"); \
 		throw ConnectionLostException(); \
-	} return; \
-}
-
-#define CHECK_COM_0() \
-if (!isConnected()) { \
-	if (wasConnected) { \
-		LOG_CORE_CRITICAL("Connection lost! Robotino is not connected anymore!"); wasConnected = false; \
-		throw ConnectionLostException(); \
-	} else { \
-		LOG_CORE_CRITICAL("Robotino is not connected!"); \
-		throw ConnectionLostException(); \
-	} return 0; \
+	} \
 }
 
 // Main Robotino class
@@ -110,13 +99,22 @@ void Robotino::Stop() {
 }
 
 bool Robotino::GetBumper() {
-	CHECK_COM_0();
+	CHECK_COM();
 
 	return bumper.value();
 }
 
+std::vector<double> Robotino::GetPose() {
+	CHECK_COM();
+
+	double x, y, phi;
+	pose.readings(&x, &y, &phi);
+
+	return { x, y, phi };
+}
+
 float Robotino::GetDistanceSensor(int index) {
-	CHECK_COM_0();
+	CHECK_COM();
 
 	if (index < 0 || index >= 9) {
 		throw std::out_of_range("Sensor index out of range");

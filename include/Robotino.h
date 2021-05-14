@@ -14,6 +14,7 @@ class Robotino : public Com {
 	OmniDrive omniDrive;
 	Bumper bumper;
 	DistanceSensor sensors[9];
+	Pose pose;
 
 public:
 	Robotino();
@@ -25,6 +26,7 @@ public:
 	void DriveDirect(float x, float y, float omega);
 	void Stop();
 	bool GetBumper();
+	std::vector<double> GetPose();
 	
 	float GetDistanceSensor(int index);
 
