@@ -4,6 +4,4 @@ diese beste, check it out
 
 # Building
 
-Windows: Double-click ```generate.bat```
-
-Linux: Not implemented/tested yet
++ This library is not meant to be built on its own: Its main purpose is to be imported by another premake script.
