@@ -31,10 +31,14 @@
 *.out
 *.app
 
-# Visual Studio
+# Visual Studio folder
 .vs
 *.sln
 
-# Other
+# Miscellaneous
 bin/
 build/
+!premake5.exe
+!packages/**
+!modules/**
+!lib/**
