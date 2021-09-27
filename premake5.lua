@@ -50,67 +50,24 @@ project "INSTALL_ALL"
 
     postbuildcommands { 
         "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
-        "SETX ROBOTINOLIB_DEBUG32_LINKS    \"$(ProjectDir)../bin/RobotinoLib32-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2d\"",
-        "SETX ROBOTINOLIB_DEBUG64_LINKS    \"$(ProjectDir)../bin/RobotinoLib64-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
-        "SETX ROBOTINOLIB_RELEASE32_LINKS  \"$(ProjectDir)../bin/RobotinoLib32.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2d\"",
-        "SETX ROBOTINOLIB_RELEASE64_LINKS  \"$(ProjectDir)../bin/RobotinoLib64.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
+        "SETX ROBOTINOLIB_DEBUG_LINKS    \"$(ProjectDir)../bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
+        "SETX ROBOTINOLIB_RELEASE_LINKS  \"$(ProjectDir)../bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
     }
     
-    dependson { projectName .. "-Debug32", projectName .. "-Release32", projectName .. "-Debug64", projectName .. "-Release64" }
+    dependson { projectName .. "-Debug", projectName .. "-Release" }
 
 
--- Debug32 version of the framework
-project (projectName .. "-Debug32")
+-- Debug version of the framework
+project (projectName .. "-Debug")
     kind "StaticLib"
     language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
-    location "build/Debug32"
-    targetname (projectName .. "32-d")
+    location "build/Debug"
+    targetname (projectName .. "-d")
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "DEBUG", "_DEBUG" }
-    runtime "Debug"
-    symbols "On"
-    system "Windows"
-    architecture "x86"
-
-    -- This is a function defined above
-    compilerOptions()
-
-
--- Release32 version of the framework
-project (projectName .. "-Release32")
-    kind "StaticLib"
-    language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-    location "build/Release32"
-    targetname (projectName .. "32")
-    targetdir (_SCRIPT_DIR .. "/bin")
-
-    defines { "NDEBUG" }
-    runtime "Release"
-    optimize "On"
-    system "Windows"
-    architecture "x86"
-
-    -- This is a function defined above
-    compilerOptions()
-
-
-
--- Debug64 version of the framework
-project (projectName .. "-Debug64")
-    kind "StaticLib"
-    language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-    location "build/Debug64"
-    targetname (projectName .. "64-d")
-    targetdir (_SCRIPT_DIR .. "/bin")
-
-    defines { "DEBUG", "_DEBUG" }
+    defines { "DEBUG", "_DEBUG", "WIN32" }
     runtime "Debug"
     symbols "On"
     system "Windows"
@@ -120,17 +77,17 @@ project (projectName .. "-Debug64")
     compilerOptions()
 
 
--- Release64 version of the framework
-project (projectName .. "-Release64")
+-- Release version of the framework
+project (projectName .. "-Release")
     kind "StaticLib"
     language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
-    location "build/Release64"
-    targetname (projectName .. "64")
+    location "build/Release"
+    targetname (projectName)
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "NDEBUG" }
+    defines { "NDEBUG", "WIN32" }
     runtime "Release"
     optimize "On"
     system "Windows"

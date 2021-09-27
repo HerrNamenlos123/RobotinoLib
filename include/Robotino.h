@@ -1,33 +1,43 @@
 #pragma once
 
-#include "RobotinoDeps.h"
-#include "Exception.h"
+#include "Robotino/Exception.h"
+#include "Robotino/Log.h"
 #include <string>
+#include <vector>
+#include <memory>
 
-class Robotino : public Com {
+namespace Robotino {
 
-	// Core utilities
-	std::string hostname;
-	bool wasConnected = false;
+	class RobotinoImpl;
 
-	// Sensors and actuators
-	OmniDrive omniDrive;
-	Bumper bumper;
-	DistanceSensor sensors[9];
-	Pose pose;
+	class Robotino {
 
-public:
-	Robotino();
-	~Robotino();
+		class RobotinoImplWrapper {
+			RobotinoImpl* impl = nullptr;
+		public:
+			RobotinoImplWrapper();
+			~RobotinoImplWrapper();
+			RobotinoImpl* get();
 
-	bool Connect(const std::string& ip);
-	void Disconnect(bool silent = false);
+			RobotinoImplWrapper& operator=(const RobotinoImplWrapper&) = delete;
+			RobotinoImplWrapper(const RobotinoImplWrapper&) = delete;
+		};
 
-	void DriveDirect(float x, float y, float omega);
-	void Stop();
-	bool GetBumper();
-	std::vector<double> GetPose();
-	
-	float GetDistanceSensor(int index);
+		std::unique_ptr<RobotinoImplWrapper> impl;
 
-};
+	public:
+		Robotino();
+
+		void Connect(const std::string& ip);
+		void Disconnect(bool silent = false);
+
+		void DriveDirect(float x, float y, float omega);
+		void Stop();
+		bool GetBumper();
+		std::vector<double> GetPose();
+
+		float GetDistanceSensor(int index);
+
+	};
+
+}
