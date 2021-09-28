@@ -50,6 +50,10 @@ namespace Robotino {
 		return impl->get()->GetPose();
 	}
 
+	Image Robotino::GetCamera() {
+		return impl->get()->GetCamera();
+	}
+
 	float Robotino::GetDistanceSensor(int index) {
 		return impl->get()->GetDistanceSensor(index);
 	}

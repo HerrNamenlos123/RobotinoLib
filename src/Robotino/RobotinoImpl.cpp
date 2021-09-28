@@ -113,6 +113,12 @@ namespace Robotino {
 		return { x, y, phi };
 	}
 
+	Image RobotinoImpl::GetCamera() {
+		CHECK_COM();
+		processEvents();
+		return camera.image;
+	}
+
 	float RobotinoImpl::GetDistanceSensor(int index) {
 		CHECK_COM();
 

@@ -1,8 +1,20 @@
 #pragma once
 
 #include "Robotino/RobotinoApi2.h"
+#include "Robotino/Image.h"
 
 namespace Robotino {
+
+	class Camera : public api2::Camera {
+	public:
+		Image image;
+
+		Camera() {}
+
+		void imageReceivedEvent(const unsigned char* data, unsigned int dataSize, unsigned int width, unsigned int height, unsigned int step) {
+			image.load(data, dataSize, width, height, step);
+		}
+	};
 
 	class RobotinoImpl : private api2::Com {
 
@@ -15,6 +27,7 @@ namespace Robotino {
 		api2::Bumper bumper;
 		api2::DistanceSensor sensors[9];
 		api2::Pose pose;
+		Camera camera;
 
 	public:
 		RobotinoImpl();
@@ -27,8 +40,12 @@ namespace Robotino {
 		void Stop();
 		bool GetBumper();
 		std::vector<double> GetPose();
+		Image GetCamera();
 
 		float GetDistanceSensor(int index);
+
+	//private:
+		//void CameraImageReceived();
 
 	};
 

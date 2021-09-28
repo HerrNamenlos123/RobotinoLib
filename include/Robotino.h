@@ -1,7 +1,11 @@
 #pragma once
 
-#include "Robotino/Exception.h"
+#ifndef DISABLE_LOGGING
 #include "Robotino/Log.h"
+#endif
+
+#include "Robotino/Exception.h"
+#include "Robotino/Image.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -35,6 +39,7 @@ namespace Robotino {
 		void Stop();
 		bool GetBumper();
 		std::vector<double> GetPose();
+		Image GetCamera();
 
 		float GetDistanceSensor(int index);
 
