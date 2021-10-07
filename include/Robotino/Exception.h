@@ -6,7 +6,7 @@ namespace Robotino {
 
 	class NotConnectedException : public std::exception {
 	public:
-		NotConnectedException() {}
+		NotConnectedException() : std::exception("Robotino::NotConnectedException -> Connection may have been lost") {}
 	};
 
 }

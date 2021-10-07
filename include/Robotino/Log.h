@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef SPDLOG
+#define SPDLOG
+
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
@@ -12,78 +15,61 @@
 
 #define DEFAULT_LOG_LEVEL LOG_LEVEL_DEBUG
 
-#define __CHECK_CORE_NULL() \
-	if (!Log::GetCoreLogger()) { \
-		LOG_INIT(); \
-		LOG_ERROR("Logger should be initialized explicitly! Make sure to use LOG_INIT()!"); \
-	}
-#define __CHECK_NULL() \
-	if (!Log::GetClientLogger()) { \
-		LOG_INIT(); \
-		LOG_ERROR("Logger should be initialized explicitly! Make sure to use LOG_INIT()!"); \
-	}
+namespace Robotino {
+	namespace Log {
 
+		extern std::shared_ptr<spdlog::logger> coreLogger;
+		extern std::shared_ptr<spdlog::logger> clientLogger;
 
-#ifdef _DEBUG
-#define LOG_INIT(...)			Log::LogInit(__VA_ARGS__)
-#define LOG_CORE_TRACE(...)		Log::LogCoreTrace(__VA_ARGS__)
-#define LOG_CORE_DEBUG(...)		Log::LogCoreDebug(__VA_ARGS__)
-#define LOG_CORE_INFO(...)		Log::LogCoreInfo(__VA_ARGS__)
-#define LOG_CORE_WARN(...)		Log::LogCoreWarn(__VA_ARGS__)
-#define LOG_CORE_ERROR(...)		Log::LogCoreError(__VA_ARGS__)
-#define LOG_CORE_CRITICAL(...)	Log::LogCoreCritical(__VA_ARGS__)
-#define LOG_TRACE(...)			Log::LogTrace(__VA_ARGS__)
-#define LOG_DEBUG(...)			Log::LogDebug(__VA_ARGS__)
-#define LOG_INFO(...)			Log::LogInfo(__VA_ARGS__)
-#define LOG_WARN(...)			Log::LogWarn(__VA_ARGS__)
-#define LOG_ERROR(...)			Log::LogError(__VA_ARGS__)
-#define LOG_CRITICAL(...)		Log::LogCritical(__VA_ARGS__)
-#define LOG_SET_LOGLEVEL(...)	Log::SetLoglevel(__VA_ARGS__)
+	}
+}
+
+#ifdef DEBUG
+
+#define LOG_SET_BATTERY_LOGLEVEL(...)	Robotino::Log::coreLogger->set_level(__VA_ARGS__)
+#define LOG_SET_CLIENT_LOGLEVEL(...)	Robotino::Log::clientLogger->set_level(__VA_ARGS__)
+#define LOG_SET_LOGLEVEL(...)			{ LOG_SET_BATTERY_LOGLEVEL(__VA_ARGS__); LOG_SET_CLIENT_LOGLEVEL(__VA_ARGS__); }
+
+#define ROBOTINOLIB_INIT_LOGGER()		{	if (!Robotino::Log::coreLogger || !Robotino::Log::clientLogger) {	\
+												spdlog::set_pattern("%^[%T] %n: %v%$"); \
+												Robotino::Log::coreLogger = spdlog::stdout_color_mt("RobotinoLib"); \
+												Robotino::Log::clientLogger = spdlog::stdout_color_mt("Application"); \
+												LOG_SET_LOGLEVEL(DEFAULT_LOG_LEVEL); \
+											} \
+										}
+
+#define LOG_CORE_TRACE(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->trace(__VA_ARGS__);				}
+#define LOG_CORE_WARN(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->warn(__VA_ARGS__);				}
+#define LOG_CORE_DEBUG(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->debug(__VA_ARGS__);				}
+#define LOG_CORE_INFO(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->info(__VA_ARGS__);				}
+#define LOG_CORE_ERROR(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->error(__VA_ARGS__);				}
+#define LOG_CORE_CRITICAL(...)			{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::coreLogger->critical(__VA_ARGS__);			}
+#define LOG_TRACE(...)					{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->trace(__VA_ARGS__);			}
+#define LOG_WARN(...)					{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->warn(__VA_ARGS__);			}
+#define LOG_DEBUG(...)					{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->debug(__VA_ARGS__);			}
+#define LOG_INFO(...)					{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->info(__VA_ARGS__);			}
+#define LOG_ERROR(...)					{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->error(__VA_ARGS__);			}
+#define LOG_CRITICAL(...)				{ ROBOTINOLIB_INIT_LOGGER(); Robotino::Log::clientLogger->critical(__VA_ARGS__);		}
+
 #else
-#define LOG_INIT()				
-#define LOG_CORE_TRACE(...)		
-#define LOG_CORE_DEBUG(...)		
-#define LOG_CORE_INFO(...)		
-#define LOG_CORE_WARN(...)		
-#define LOG_CORE_ERROR(...)		
-#define LOG_CORE_CRITICAL(...)	
-#define LOG_TRACE(...)	
-#define LOG_DEBUG(...)	
-#define LOG_INFO(...)	
-#define LOG_WARN(...)	
-#define LOG_ERROR(...)	
-#define LOG_CRITICAL(...)
-#define LOG_SET_LOGLEVEL(...)
+
+#define LOG_SET_BATTERY_LOGLEVEL(...)	{ ; }
+#define LOG_SET_CLIENT_LOGLEVEL(...)	{ ; }
+#define LOG_SET_LOGLEVEL(...)			{ ; }
+
+#define LOG_CORE_TRACE(...)				{ ; }
+#define LOG_CORE_WARN(...)				{ ; }
+#define LOG_CORE_DEBUG(...)				{ ; }
+#define LOG_CORE_INFO(...)				{ ; }
+#define LOG_CORE_ERROR(...)				{ ; }
+#define LOG_CORE_CRITICAL(...)			{ ; }
+#define LOG_TRACE(...)					{ ; }
+#define LOG_WARN(...)					{ ; }
+#define LOG_DEBUG(...)					{ ; }
+#define LOG_INFO(...)					{ ; }
+#define LOG_ERROR(...)					{ ; }
+#define LOG_CRITICAL(...)				{ ; }
+
 #endif
 
-
-class Log {
-public:
-	Log();
-	~Log();
-
-	static void Init(spdlog::level::level_enum level = DEFAULT_LOG_LEVEL);
-
-	static void SetLogLevel(spdlog::level::level_enum level);
-
-	inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return coreLogger; };
-	inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return clientLogger; };
-
-	template <typename... T> static void LogInit(T... args)				{ Log::Init(args...); }
-	template <typename... T> static void LogCoreTrace(T... args)		{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->trace(args...); }
-	template <typename... T> static void LogCoreDebug(T... args)		{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->debug(args...); }
-	template <typename... T> static void LogCoreInfo(T... args)			{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->info(args...); }
-	template <typename... T> static void LogCoreWarn(T... args)			{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->warn(args...); }
-	template <typename... T> static void LogCoreError(T... args)		{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->error(args...); }
-	template <typename... T> static void LogCoreCritical(T... args)		{ __CHECK_CORE_NULL(); Log::GetCoreLogger()->critical(args...); }
-	template <typename... T> static void LogTrace(T... args)			{ __CHECK_NULL(); Log::GetClientLogger()->trace(args...); }
-	template <typename... T> static void LogDebug(T... args)			{ __CHECK_NULL(); Log::GetClientLogger()->debug(args...); }
-	template <typename... T> static void LogInfo(T... args)				{ __CHECK_NULL(); Log::GetClientLogger()->info(args...); }
-	template <typename... T> static void LogWarn(T... args)				{ __CHECK_NULL(); Log::GetClientLogger()->warn(args...); }
-	template <typename... T> static void LogError(T... args)			{ __CHECK_NULL(); Log::GetClientLogger()->error(args...); }
-	template <typename... T> static void LogCritical(T... args)			{ __CHECK_NULL(); Log::GetClientLogger()->critical(args...); }
-
-private:
-	static std::shared_ptr<spdlog::logger> coreLogger;
-	static std::shared_ptr<spdlog::logger> clientLogger;
-};
+#endif // SPDLOG

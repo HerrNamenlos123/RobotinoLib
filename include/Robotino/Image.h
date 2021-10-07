@@ -7,7 +7,7 @@
 namespace Robotino {
 
 	struct Color {
-		float r, g, b;
+		uint8_t r, g, b;
 	};
 
     class Image {
@@ -50,7 +50,12 @@ namespace Robotino {
             }
 
             create(width, height);
-            memcpy(&this->data[0].r, data, (size_t)width * height * 3);
+            memcpy(&this->data[0].r, data, (size_t)width * height * 3);   // Weird speed differences
+            //uint64_t* target = (uint64_t*)&this->data[0].r;
+            //uint64_t* src = (uint64_t*)data;
+            //for (size_t i = 0; i < (size_t)width * height * 3 / sizeof(uint64_t); i++) {
+            //    target[i] = src[i];
+            //}
         }
 
         void create(size_t width, size_t height, const Color& fillColor = { 0, 0, 0 }) {

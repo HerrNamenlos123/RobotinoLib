@@ -1,9 +1,6 @@
 #pragma once
 
-#ifndef DISABLE_LOGGING
 #include "Robotino/Log.h"
-#endif
-
 #include "Robotino/Exception.h"
 #include "Robotino/Image.h"
 #include <string>
