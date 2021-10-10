@@ -121,5 +121,14 @@ newaction {
 
         print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/bin/ /usr/local/")
         os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/bin/ /usr/local/")
+
+        print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/include/ /usr/local/")
+        os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/include/ /usr/local/")
+
+        print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/bin/ /usr/local/")
+        os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/bin/ /usr/local/")
+
+        print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/modules/spdlog/include/ /usr/local/")
+        os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/modules/spdlog/include/ /usr/local/")
     end
 }

@@ -24,11 +24,11 @@ namespace Robotino {
 	}
 }
 
-#ifdef DEBUG
+#ifndef DEPLOY
 
-#define LOG_SET_BATTERY_LOGLEVEL(...)	Robotino::Log::coreLogger->set_level(__VA_ARGS__)
-#define LOG_SET_CLIENT_LOGLEVEL(...)	Robotino::Log::clientLogger->set_level(__VA_ARGS__)
-#define LOG_SET_LOGLEVEL(...)			{ LOG_SET_BATTERY_LOGLEVEL(__VA_ARGS__); LOG_SET_CLIENT_LOGLEVEL(__VA_ARGS__); }
+#define LOG_SET_ROBOTINOLIB_LOGLEVEL(...)	{ Robotino::Log::coreLogger->set_level(__VA_ARGS__);    }
+#define LOG_SET_CLIENT_LOGLEVEL(...)		{ Robotino::Log::clientLogger->set_level(__VA_ARGS__);  }
+#define LOG_SET_LOGLEVEL(...)				{ LOG_SET_ROBOTINOLIB_LOGLEVEL(__VA_ARGS__); LOG_SET_CLIENT_LOGLEVEL(__VA_ARGS__); }
 
 #define ROBOTINOLIB_INIT_LOGGER()		{	if (!Robotino::Log::coreLogger || !Robotino::Log::clientLogger) {	\
 												spdlog::set_pattern("%^[%T] %n: %v%$"); \
