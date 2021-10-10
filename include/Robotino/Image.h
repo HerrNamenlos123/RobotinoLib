@@ -46,7 +46,7 @@ namespace Robotino {
         void load(const unsigned char* data, unsigned int dataSize, unsigned int width, unsigned int height, unsigned int step) {
 
             if (step != width * 3) {
-                throw std::exception(("Unknown image format: width " + std::to_string(width) + ", step " + std::to_string(step)).c_str());
+                throw std::logic_error(("Unknown image format: width " + std::to_string(width) + ", step " + std::to_string(step)).c_str());
             }
 
             create(width, height);
@@ -91,11 +91,11 @@ namespace Robotino {
 		Color get(size_t x, size_t y) const {
 
             if (!valid)
-                throw std::exception("Image was not initialized");
+                throw std::logic_error("Image was not initialized");
 
             size_t index = y * width + x;
             if (index >= data.size())
-                throw std::exception("Invalid index");
+                throw std::logic_error("Invalid index");
 
             return data[index];
         }
@@ -103,7 +103,7 @@ namespace Robotino {
         void flipVertical() {
 
             if (!valid)
-                throw std::exception("Image was not initialized");
+                throw std::logic_error("Image was not initialized");
 
             Image img(width, height);
 

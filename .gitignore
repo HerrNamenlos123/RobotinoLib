@@ -31,8 +31,9 @@
 *.out
 *.app
 
-# Visual Studio folder
+# Visual Studio (code)
 .vs
+.vscode
 *.sln
 
 # Miscellaneous

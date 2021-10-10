@@ -3,19 +3,22 @@
 -- This function defines all compiler options and is called once for debug and once for release
 function compilerOptions ()
 
-    includedirs ({ 
-        _SCRIPT_DIR .. "/include", 
-        _SCRIPT_DIR .. "/modules/spdlog/include",
-        "$(ROBOTINOAPI2_64_DIR)/include"
-    })
+    includedirs (_SCRIPT_DIR .. "/include")
+    includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
+    
+    filter "system:windows"
+    	includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
+    filter "system:not windows"
+    	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
+    filter {}
 
     -- Main source files
     files ({ _SCRIPT_DIR .. "/include/**", _SCRIPT_DIR .. "/src/**" })
 
     -- Precompiled headers
-    --pchheader "Battery/pch.h"
+    --pchheader "Robotino/pch.h"
     --pchsource "src/pch.cpp"
-    --filter { "files:include/glm/detail/glm.cpp or files:modules/**" }
+    --filter { "files:modules/**" }
     --    flags { 'NoPCH' }
     --filter {}
 
@@ -37,22 +40,28 @@ workspace (projectName)
 
     platforms { "ALL" }
     defaultplatform "ALL"
-    startproject "INSTALL_ALL"
+    startproject "BUILD_ALL"
+    
+    filter "system:not windows"
+    	location "build"
+    filter {}
 
 -- Utility project for building and installing everything
-project "INSTALL_ALL"
+project "BUILD_ALL"
     kind "Utility"
-    basedir "build"
+    basedir "build/BUILD_ALL"
 
-    local _includedirs = "$(ProjectDir)../include/;"
-    _includedirs = _includedirs .. "$(ProjectDir)../modules/spdlog/include/;"
-    _includedirs = _includedirs .. "$(ROBOTINOAPI2_64_DIR)/include;"
+    filter "system:windows"
+        local _includedirs = "$(ProjectDir)../include/;"
+        _includedirs = _includedirs .. "$(ProjectDir)../modules/spdlog/include/;"
+        _includedirs = _includedirs .. "$(ROBOTINOAPI2_64_DIR)/include;"
 
-    postbuildcommands { 
-        "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
-        "SETX ROBOTINOLIB_DEBUG_LINKS    \"$(ProjectDir)../bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
-        "SETX ROBOTINOLIB_RELEASE_LINKS  \"$(ProjectDir)../bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
-    }
+        postbuildcommands { 
+            "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
+            "SETX ROBOTINOLIB_DEBUG_LINKS    \"$(ProjectDir)../bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_RELEASE_LINKS  \"$(ProjectDir)../bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
+        }
+    filter {}
     
     dependson { projectName .. "-Debug", projectName .. "-Release" }
 
@@ -67,11 +76,14 @@ project (projectName .. "-Debug")
     targetname (projectName .. "-d")
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "DEBUG", "_DEBUG", "WIN32" }
+    defines { "DEBUG", "_DEBUG" }
     runtime "Debug"
     symbols "On"
-    system "Windows"
     architecture "x86_64"
+    
+    filter "system:windows"
+    	defines { "WIN32" }
+    filter {}
 
     -- This is a function defined above
     compilerOptions()
@@ -87,11 +99,27 @@ project (projectName .. "-Release")
     targetname (projectName)
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "NDEBUG", "WIN32" }
+    defines { "NDEBUG" }
     runtime "Release"
     optimize "On"
-    system "Windows"
     architecture "x86_64"
+    
+    filter "system:windows"
+    	defines { "WIN32" }
+    filter {}
 
     -- This is a function defined above
     compilerOptions()
+
+
+newaction {
+    trigger     = "install",
+    description = "Install the software",
+    execute = function ()
+        print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/include/ /usr/local/")
+        os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/include/ /usr/local/")
+
+        print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/bin/ /usr/local/")
+        os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/robotinoapi2/linux/bin/ /usr/local/")
+    end
+}
