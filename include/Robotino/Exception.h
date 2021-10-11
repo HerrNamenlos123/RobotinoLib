@@ -4,9 +4,9 @@
 
 namespace Robotino {
 
-	class NotConnectedException : public std::exception {
+	class NotConnectedException : public std::logic_error {
 	public:
-		NotConnectedException() : std::exception("Robotino::NotConnectedException -> Connection may have been lost") {}
+		NotConnectedException() : std::logic_error("Robotino::NotConnectedException -> Connection may have been lost") {}
 	};
 
 }
