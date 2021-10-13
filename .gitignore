@@ -39,7 +39,8 @@
 # Miscellaneous
 bin/
 build/
-!premake5.exe
 !packages/**
 !modules/**
 !lib/**
+!premake5/**
+!robotinoapi2/**

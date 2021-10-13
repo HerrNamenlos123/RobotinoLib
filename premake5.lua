@@ -7,7 +7,7 @@ function compilerOptions ()
     includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
     
     filter "system:windows"
-    	includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
+        includedirs (_SCRIPT_DIR .. "/robotinoapi2/windows/include")
     filter "system:not windows"
     	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
     filter {}
@@ -52,18 +52,20 @@ project "BUILD_ALL"
     basedir "build/BUILD_ALL"
 
     filter "system:windows"
-        local _includedirs = "$(ProjectDir)../include/;"
-        _includedirs = _includedirs .. "$(ProjectDir)../modules/spdlog/include/;"
-        _includedirs = _includedirs .. "$(ROBOTINOAPI2_64_DIR)/include;"
+        local _includedirs = _SCRIPT_DIR .. "/include/;"
+        _includedirs = _includedirs .. _SCRIPT_DIR .. "/modules/spdlog/include/;"
+        _includedirs = _includedirs .. _SCRIPT_DIR .. "/robotinoapi2/windows/include/;"
 
         postbuildcommands { 
             "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
-            "SETX ROBOTINOLIB_DEBUG_LINKS    \"$(ProjectDir)../bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_RELEASE_LINKS  \"$(ProjectDir)../bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
+            "SETX ROBOTINOLIB_DEBUG_LINKS    \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-d.lib;" .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_RELEASE_LINKS  \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-r.lib;" .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_DEPLOY_LINKS   \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib.lib;"   .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_BINARY_DIR     \"" .. _SCRIPT_DIR .. "/robotinoapi2/windows/bin\""
         }
     filter {}
     
-    dependson { projectName .. "-Debug", projectName .. "-Release" }
+    dependson { projectName .. "-Debug", projectName .. "-Release", projectName .. "-Deploy" }
 
 
 -- Debug version of the framework
@@ -76,7 +78,7 @@ project (projectName .. "-Debug")
     targetname (projectName .. "-d")
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "DEBUG", "_DEBUG" }
+    defines { "DEBUG", "_DEBUG", "NDEPLOY" }
     runtime "Debug"
     symbols "On"
     architecture "x86_64"
@@ -96,16 +98,39 @@ project (projectName .. "-Release")
 	cppdialect "C++17"
 	staticruntime "on"
     location "build/Release"
-    targetname (projectName)
+    targetname (projectName .. "-r")
     targetdir (_SCRIPT_DIR .. "/bin")
 
-    defines { "NDEBUG" }
+    defines { "NDEBUG", "NDEPLOY" }
     runtime "Release"
     optimize "On"
     architecture "x86_64"
     
     filter "system:windows"
     	defines { "WIN32" }
+    filter {}
+
+    -- This is a function defined above
+    compilerOptions()
+
+
+-- Deploy version of the framework
+project (projectName .. "-Deploy")
+    kind "StaticLib"
+    language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
+    location "build/Deploy"
+    targetname (projectName)
+    targetdir (_SCRIPT_DIR .. "/bin")
+
+    defines { "NDEBUG", "DEPLOY" }
+    runtime "Release"
+    optimize "On"
+    architecture "x86_64"
+    
+    filter "system:windows"
+        defines { "WIN32" }
     filter {}
 
     -- This is a function defined above
