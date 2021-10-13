@@ -7,7 +7,7 @@ function compilerOptions ()
     includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
     
     filter "system:windows"
-        includedirs (_SCRIPT_DIR .. "/robotinoapi2/windows/include")
+        includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
     filter "system:not windows"
     	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
     filter {}
@@ -137,6 +137,8 @@ project (projectName .. "-Deploy")
     compilerOptions()
 
 
+-- Installation script for linux
+filter "system:not windows"
 newaction {
     trigger     = "install",
     description = "Install the software",
@@ -157,3 +159,4 @@ newaction {
         os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/modules/spdlog/include/ /usr/local/")
     end
 }
+filter {}
