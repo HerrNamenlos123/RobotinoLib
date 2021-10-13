@@ -5,6 +5,10 @@
 
 #include <iostream>
 
+#ifdef DEPLOY
+#pragma warning( disable : 4101 )	// Suppress warning about unused variable 'e' (Only in this .cpp file)
+#endif
+
 #define CHECK_COM() \
 if (!isConnected()) { \
 	if (wasConnected) { \

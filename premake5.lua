@@ -54,14 +54,13 @@ project "BUILD_ALL"
     filter "system:windows"
         local _includedirs = _SCRIPT_DIR .. "/include/;"
         _includedirs = _includedirs .. _SCRIPT_DIR .. "/modules/spdlog/include/;"
-        _includedirs = _includedirs .. _SCRIPT_DIR .. "/robotinoapi2/windows/include/;"
+        _includedirs = _includedirs .. "$(ROBOTINOAPI2_64_DIR)/include;"
 
         postbuildcommands { 
             "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
-            "SETX ROBOTINOLIB_DEBUG_LINKS    \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-d.lib;" .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_RELEASE_LINKS  \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-r.lib;" .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_DEPLOY_LINKS   \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib.lib;"   .. _SCRIPT_DIR .. "/robotinoapi2/windows/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_BINARY_DIR     \"" .. _SCRIPT_DIR .. "/robotinoapi2/windows/bin\""
+            "SETX ROBOTINOLIB_DEBUG_LINKS    \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_RELEASE_LINKS  \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-r.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
+            "SETX ROBOTINOLIB_DEPLOY_LINKS   \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
         }
     filter {}
     

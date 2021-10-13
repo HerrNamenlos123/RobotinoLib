@@ -24,6 +24,8 @@ namespace Robotino {
 	}
 }
 
+// TODO: Make logging more fool-proof (and check if name already exists, prevent crashes)
+
 #ifndef DEPLOY
 
 #define LOG_SET_ROBOTINOLIB_LOGLEVEL(...)	{ Robotino::Log::coreLogger->set_level(__VA_ARGS__);    }
@@ -33,7 +35,7 @@ namespace Robotino {
 #define ROBOTINOLIB_INIT_LOGGER()		{	if (!Robotino::Log::coreLogger || !Robotino::Log::clientLogger) {	\
 												spdlog::set_pattern("%^[%T] %n: %v%$"); \
 												Robotino::Log::coreLogger = spdlog::stdout_color_mt("RobotinoLib"); \
-												Robotino::Log::clientLogger = spdlog::stdout_color_mt("Application"); \
+												Robotino::Log::clientLogger = spdlog::stdout_color_mt("RobotinoApp"); \
 												LOG_SET_LOGLEVEL(DEFAULT_LOG_LEVEL); \
 											} \
 										}
