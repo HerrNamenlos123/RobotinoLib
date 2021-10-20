@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e		# exit on error
 
+if [ "$EUID" -ne 0 ]
+  then echo "Installation script must be run as root! Make sure to use sudo!"
+  exit
+fi
+
 # Replace the generator here
 _generator=gmake
 _projectname=RobotinoLib

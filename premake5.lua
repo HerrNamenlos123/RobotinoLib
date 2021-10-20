@@ -163,6 +163,9 @@ newaction {
 
         print("{COPY} " .. _MAIN_SCRIPT_DIR .. "/modules/spdlog/include/ /usr/local/")
         os.execute("{COPY} " .. _MAIN_SCRIPT_DIR .. "/modules/spdlog/include/ /usr/local/")
+
+        print("echo \"/usr/local/bin\" | sudo tee -a /etc/ld.so.conf.d/RobotinoLib.conf; sudo ldconfig")
+        os.execute("echo \"/usr/local/bin\" | sudo tee -a /etc/ld.so.conf.d/RobotinoLib.conf; sudo ldconfig")
     end
 }
 filter {}
