@@ -1,38 +1,21 @@
 
-
--- This function defines all compiler options and is called once for debug and once for release
-function compilerOptions ()
-
-    includedirs (_SCRIPT_DIR .. "/include")
-    includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
-    
-    filter "system:windows"
-        includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
-    filter "system:not windows"
-    	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
-    filter {}
-
-    -- Main source files
-    files ({ _SCRIPT_DIR .. "/include/**", _SCRIPT_DIR .. "/src/**" })
-
-    -- Precompiled headers
-    --pchheader "Robotino/pch.h"
-    --pchsource "src/pch.cpp"
-    --filter { "files:modules/**" }
-    --    flags { 'NoPCH' }
-    --filter {}
-
-end
-
-
-
-
-
-
 -- Retrieve the project name
 newoption { trigger = "projectname", description = "Name of the generated project" }
 local projectName = _OPTIONS["projectname"]
 if projectName == nil then print("The project name was not specified! --projectname=YourApplication") end
+
+-- Check if an environment variable exists, otherwise abort the program
+function CheckEnvVar (variable, productName)
+    if (os.getenv(variable) == nil) then
+        print("Environment variable " .. variable .. " not found! Make sure the " .. productName .. " is installed correctly!")
+        projectName = nil
+    end
+end
+
+-- Here check if the Festo Robotino API 2 is installed, otherwise abort
+if os.host() == "windows" then
+    CheckEnvVar("ROBOTINOAPI2_64_DIR", "Festo Robotino API 2")
+end
 
 -- Main Solution
 workspace (projectName)
@@ -66,6 +49,30 @@ project "BUILD_ALL"
     
     dependson { projectName .. "-Debug", projectName .. "-Release", projectName .. "-Deploy" }
 
+
+-- This function defines all compiler options and is called once for each build configuration
+function compilerOptions ()
+
+    includedirs (_SCRIPT_DIR .. "/include")
+    includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
+    
+    filter "system:windows"
+        includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
+    filter "system:not windows"
+    	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
+    filter {}
+
+    -- Main source files
+    files ({ _SCRIPT_DIR .. "/include/**", _SCRIPT_DIR .. "/src/**" })
+
+    -- Precompiled headers
+    --pchheader "Robotino/pch.h"
+    --pchsource "src/pch.cpp"
+    --filter { "files:modules/**" }
+    --    flags { 'NoPCH' }
+    --filter {}
+
+end
 
 -- Debug version of the framework
 project (projectName .. "-Debug")

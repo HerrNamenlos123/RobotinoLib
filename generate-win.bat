@@ -23,4 +23,7 @@ set _projectname=RobotinoLib
 echo Generating project '%_projectname%'
 
 call "%~dp0premake5\windows\premake5.exe" %_generator% --file="%~dp0premake5.lua" --projectname=%_projectname% && start %_projectname%.sln
+
+if %errorlevel% neq 0 Pause && exit
+
 Timeout 5
