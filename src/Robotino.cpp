@@ -58,4 +58,8 @@ namespace Robotino {
 		return impl->get()->GetDistanceSensor(index);
 	}
 
+	void Shutdown() {
+		rec::robotino::api2::shutdown();
+	}
+
 }

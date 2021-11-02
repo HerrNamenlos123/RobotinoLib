@@ -42,4 +42,6 @@ namespace Robotino {
 
 	};
 
+	void Shutdown();
+
 }
