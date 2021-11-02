@@ -46,23 +46,21 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
 
 ### Linux
 <details>
-<summary>Installation instructions for Linux distributions</summary><br \>
+<summary>Installation instructions for Linux distributions</summary>
 
-This method is only recommended when you can't install git:
+#### Requirements
 
- - Simply download the zip file at the top of this page:  
+ - git: `sudo apt install git`
+ - make: `sudo apt install build-essential`
+ - Qt5: `sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools`
 
-![Github1](https://user-images.githubusercontent.com/44909261/137966799-d84a4c8d-c441-4569-a42e-934eccd642a4.png)  
+#### Building
 
- - Next, extract the zip file to a location where it can stay without being deleted accidentally  
-   (e.g. `C:\dev\` or `Documents`, not the `Download` folder)
-   
- - Once this has finished, navigate to the extracted folder and continue with [step 2](#step-2)
+ - Navigate to a working directory and clone:  
+ `git clone --recursive https://github.com/HerrNamenlos123/RobotinoLib.git`
+ - Generate the project files: `./generate-linux.sh`
+ - Build the library: `cd build` and `make`
+ - Install the library: `cd ..` and `sudo ./install-linux.sh`
+ - Now the the library is ready to use. Check out the [RobotinoTemplate](https://github.com/HerrNamenlos123/RobotinoTemplate) for instructions on how to use it.
 
 </details>
-
-git  
-build-essential  
-Qt5  
-sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools  
-+ `git clone --recursive https://github.com/HerrNamenlos123/RobotinoLib.git`
