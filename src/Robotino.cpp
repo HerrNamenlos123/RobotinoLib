@@ -2,6 +2,8 @@
 #include "Robotino.h"
 #include "Robotino/RobotinoImpl.h"
 
+// TEST; DELETE THIS
+
 namespace Robotino {
 
 	// Robotino::RobotinoImplWrapper
