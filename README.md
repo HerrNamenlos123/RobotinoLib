@@ -1,4 +1,18 @@
-# RobotinoLib
+
+
+## About
+
+<img align="right" width="200" height="183" src="https://cloud.githubusercontent.com/assets/532272/21507867/3376e9fe-cc4a-11e6-9350-7ec4f680da36.gif">Markdown magic uses comment blocks in markdown files to automatically sync or transform its contents.
+
+- Automatically keep markdown files up to date from local or remote code sources
+- Transform markdown content with custom transform functions
+- Render markdown with any template engine
+- Automatically generate a table of contents
+- ... etc
+
+The comments markdown magic uses are hidden in markdown and when viewed as HTML.
+
+# ✨RobotinoLib✨
 
 <img src="https://ip.festo-didactic.com/InfoPortal/Robotino/Images/4_Robotino.jpg" alt="drawing" width="200"/>
 
