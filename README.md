@@ -30,7 +30,7 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
  - Extract the zip file to a location where it can stay without being deleted accidentally  
    (e.g. `C:\dev\` or `Documents`, not the `Download` folder)
    
- - Once this has finished, navigate to the extracted folder and continue with this step [here](##What-is-this)
+ - Once this has finished, navigate to the extracted folder and continue with this step [here](##-What-is-this)
  
 </details>
 
