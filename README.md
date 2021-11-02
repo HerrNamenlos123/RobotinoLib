@@ -51,7 +51,7 @@ This method is only recommended when you can't install git:
 
 </details>
 
-[step 2](###Linux)
+[step 2](#Linux)
 
 git  
 build-essential  
