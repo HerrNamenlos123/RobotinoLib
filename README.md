@@ -16,6 +16,7 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
 
  - [Microsoft Visual Studio 2019](https://visualstudio.microsoft.com/de/downloads/) - Other IDEs can be used by editing `generate-win.bat`
  - [git](https://git-scm.com/downloads) - Recommended for cloning the repository
+ - [Robotino API 2](https://wiki.openrobotino.org/index.php?title=API2) - Here is the direct [download link](https://packages.openrobotino.org/windows/robotino-api2/msvc-142/robotino_api2-amd64-msvc-142-1.1.14.exe) for Windows 64-bit, Visual Studio 2019
 
 #### Cloning the repository (using git)
 
