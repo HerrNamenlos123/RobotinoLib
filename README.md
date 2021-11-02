@@ -48,8 +48,10 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
 
 ### Linux
 <details>
-<summary>Installation instructions for Linux distributions</summary>
+<summary>Installation instructions for Linux distributions</summary><br \>
 
+This library is tested with a fresh install of Debian 11
+ 
 #### Requirements
 
  - git: `sudo apt install git`
