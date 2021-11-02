@@ -1,5 +1,5 @@
 
-<img src="https://ip.festo-didactic.com/InfoPortal/Robotino/Images/4_Robotino.jpg" alt="drawing" width="400" align="right"/></p>
+<img src="https://user-images.githubusercontent.com/44909261/139950639-b42e3bd9-556c-4971-a436-f458c33ecd51.png" alt="drawing" width="400" align="right"/></p>
 
 # ✨RobotinoLib✨
 
