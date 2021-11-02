@@ -1,6 +1,6 @@
 # RobotinoLib
 
-![Festo](https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Festo_logo.svg/2000px-Festo_logo.svg.png)
+![Festo](https://ip.festo-didactic.com/InfoPortal/Robotino/Images/4_Robotino.jpg)
 
 diese beste, check it out
 
