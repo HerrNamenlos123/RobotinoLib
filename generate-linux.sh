@@ -29,4 +29,4 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 echo -e "\e[32mGeneration successful, next steps:\e[0m"
 echo " - to build: 'cd build' and 'make'"
-echo " - to install: 'sudo ./install-linux.sh' (use 'cd ..' after building)"
+echo " - to install: 'sudo ./install-linux.sh'"
