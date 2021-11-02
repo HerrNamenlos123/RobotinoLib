@@ -12,7 +12,12 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
 <details>
 <summary>Installation instructions for Windows 64-bit</summary>
 
-#### Cloning the repository
+#### Requirements
+
+ - [Microsoft Visual Studio 2019](https://visualstudio.microsoft.com/de/downloads/) - Other IDEs can be used by editing `generate-win.bat`
+ - [git](https://git-scm.com/downloads) - Recommended for cloning the repository
+
+#### Cloning the repository (using git)
 
 ##### Part 1:
  - In the File Explorer, navigate to the target directory, a location where it can stay without being deleted accidentally  
@@ -27,8 +32,9 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
  - Finally, in Visual Studio, build the project `BUILD_ALL` in the project explorer
  - After compilation, the library is ready to use. Check out the [RobotinoTemplate](https://github.com/HerrNamenlos123/RobotinoTemplate) for instructions on how to use it.
 
-#### Downloading the ZIP-file
+#### Downloading the ZIP-file (without git)
 
+##### Part 1:
  - Download this repository's zip-file by using the green button at the top of this page
  - Extract the zip file to a location where it can stay without being deleted accidentally  
    (e.g. `C:\dev\` or `Documents`, not the `Download` folder)
@@ -39,7 +45,7 @@ This library is a wrapper around the Festo Robotino API 2. The goal is to make w
 
 ### Linux
 <details>
-<summary>Installation instructions for Linux distributions</summary>  
+<summary>Installation instructions for Linux distributions</summary><br \>
 
 This method is only recommended when you can't install git:
 
