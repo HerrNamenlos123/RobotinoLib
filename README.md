@@ -57,7 +57,7 @@ This library was tested on Debian 11
 
  - git: `sudo apt install git`
  - make: `sudo apt install build-essential`
- - Qt5: `sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools`
+ - Qt5: `sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools` - (Be careful with this, may break the robotino. First try everything without this command)
 
 #### Building
 
