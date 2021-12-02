@@ -25,11 +25,11 @@ project "RobotinoLib"
     filter "configurations:Debug"
         defines { "DEBUG", "_DEBUG" }
         runtime "Debug"
-        optimize "On"
+        symbols "On"
         targetdir (_SCRIPT_DIR .. "/bin/Debug/")
     filter "configurations:Release"
         defines { "NDEBUG" }
-        symbols "On"
+        optimize "On"
         runtime "Release"
         targetdir (_SCRIPT_DIR .. "/bin/Release/")
     filter {}
