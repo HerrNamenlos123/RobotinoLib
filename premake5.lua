@@ -1,9 +1,4 @@
 
--- Retrieve the project name
-newoption { trigger = "projectname", description = "Name of the generated project" }
-local projectName = _OPTIONS["projectname"]
-if projectName == nil then print("The project name was not specified! --projectname=YourApplication") end
-
 -- Check if an environment variable exists, otherwise abort the program
 function CheckEnvVar (variable, productName)
     if (os.getenv(variable) == nil) then
@@ -17,47 +12,34 @@ if os.host() == "windows" then
     CheckEnvVar("ROBOTINOAPI2_64_DIR", "Festo Robotino API 2")
 end
 
--- Main Solution
-workspace (projectName)
-    configurations { "ALL" }
+-- The actual project file itself
+project "RobotinoLib"
+    kind "StaticLib"
+    language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+    architecture "x86_64"
+    targetname "RobotinoLib"
+    location "build"
 
-    platforms { "ALL" }
-    defaultplatform "ALL"
-    startproject "BUILD_ALL"
-    
-    filter "system:not windows"
-    	location "build"
+    filter "configurations:Debug"
+        defines { "DEBUG", "_DEBUG" }
+        runtime "Debug"
+        symbols "On"
+        targetdir (_SCRIPT_DIR .. "/bin/Debug/")
+    filter "configurations:Release"
+        defines { "NDEBUG" }
+        optimize "On"
+        runtime "Release"
+        targetdir (_SCRIPT_DIR .. "/bin/Release/")
     filter {}
-
--- Utility project for building and installing everything
-project "BUILD_ALL"
-    kind "Utility"
-    basedir "build/BUILD_ALL"
-
-    filter "system:windows"
-        local _includedirs = _SCRIPT_DIR .. "/include/;"
-        _includedirs = _includedirs .. _SCRIPT_DIR .. "/modules/spdlog/include/;"
-        _includedirs = _includedirs .. "$(ROBOTINOAPI2_64_DIR)/include;"
-
-        postbuildcommands { 
-            "SETX ROBOTINOLIB_INCLUDE_DIRECTORY \"" .. _includedirs .. "\"",
-            "SETX ROBOTINOLIB_DEBUG_LINKS    \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-d.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_RELEASE_LINKS  \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib-r.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\"",
-            "SETX ROBOTINOLIB_DEPLOY_LINKS   \"" .. _SCRIPT_DIR .. "/bin/RobotinoLib.lib;$(ROBOTINOAPI2_64_DIR)/lib/rec_robotino_api2\""
-        }
-    filter {}
-    
-    dependson { projectName .. "-Debug", projectName .. "-Release", projectName .. "-Deploy" }
-
-
--- This function defines all compiler options and is called once for each build configuration
-function compilerOptions ()
 
     includedirs (_SCRIPT_DIR .. "/include")
     includedirs (_SCRIPT_DIR .. "/modules/spdlog/include")
     
     filter "system:windows"
         includedirs ("$(ROBOTINOAPI2_64_DIR)/include")
+    	defines { "WIN32" }
     filter "system:not windows"
     	includedirs (_SCRIPT_DIR .. "/robotinoapi2/linux/include")
     filter {}
@@ -71,76 +53,6 @@ function compilerOptions ()
     --filter { "files:modules/**" }
     --    flags { 'NoPCH' }
     --filter {}
-
-end
-
--- Debug version of the framework
-project (projectName .. "-Debug")
-    kind "StaticLib"
-    language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-    location "build/Debug"
-    targetname (projectName .. "-d")
-    targetdir (_SCRIPT_DIR .. "/bin")
-
-    defines { "DEBUG", "_DEBUG", "NDEPLOY" }
-    runtime "Debug"
-    symbols "On"
-    architecture "x86_64"
-    
-    filter "system:windows"
-    	defines { "WIN32" }
-    filter {}
-
-    -- This is a function defined above
-    compilerOptions()
-
-
--- Release version of the framework
-project (projectName .. "-Release")
-    kind "StaticLib"
-    language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-    location "build/Release"
-    targetname (projectName .. "-r")
-    targetdir (_SCRIPT_DIR .. "/bin")
-
-    defines { "NDEBUG", "NDEPLOY" }
-    runtime "Release"
-    optimize "On"
-    architecture "x86_64"
-    
-    filter "system:windows"
-    	defines { "WIN32" }
-    filter {}
-
-    -- This is a function defined above
-    compilerOptions()
-
-
--- Deploy version of the framework
-project (projectName .. "-Deploy")
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    location "build/Deploy"
-    targetname (projectName)
-    targetdir (_SCRIPT_DIR .. "/bin")
-
-    defines { "NDEBUG", "DEPLOY" }
-    runtime "Release"
-    optimize "On"
-    architecture "x86_64"
-    
-    filter "system:windows"
-        defines { "WIN32" }
-    filter {}
-
-    -- This is a function defined above
-    compilerOptions()
 
 
 -- Installation script for linux

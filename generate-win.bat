@@ -39,6 +39,6 @@ if not "%_projectname%"=="%_projectname: =%" echo [91mThe project name must not
 echo Generating project '%_projectname%'
 
 cd "%~dp0"
-premake5\windows\premake5.exe %_generator% --file=premake5.lua --projectname=%_projectname% && start %_projectname%.sln
+premake5\windows\premake5.exe %_generator% --file=workspace.lua --projectname=%_projectname% && start %_projectname%.sln
 if %errorlevel% neq 0 Pause && exit 1
 Timeout 5
