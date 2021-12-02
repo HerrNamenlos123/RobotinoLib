@@ -4,6 +4,7 @@ function CheckEnvVar (variable, productName)
     if (os.getenv(variable) == nil) then
         print("Environment variable " .. variable .. " not found! Make sure the " .. productName .. " is installed correctly!")
         projectName = nil
+        os.exit(1)
     end
 end
 
